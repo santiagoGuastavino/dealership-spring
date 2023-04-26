@@ -5,6 +5,8 @@ import smg.dealership.entity.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Repository
 public class VehicleRepository {
@@ -14,10 +16,21 @@ public class VehicleRepository {
         vehicleList.add(vehicle);
     }
 
-    public Optional<Vehicle> findOneByLicensePlate(String licensePlate) {
+    public Optional<Vehicle> findOne(Predicate<Vehicle> filter) {
         return vehicleList
             .stream()
-            .filter(vehicle -> vehicle.getLicensePlate().equalsIgnoreCase(licensePlate))
+            .filter(filter)
             .findFirst();
+    }
+
+    public ArrayList<Vehicle> listVehicles() {
+        return vehicleList;
+    }
+
+    public ArrayList<Vehicle> listVehicles(Predicate<Vehicle> filter) {
+        return vehicleList
+            .stream()
+            .filter(filter)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 }
